@@ -10,7 +10,7 @@ from aiogram.types import Message
 from aiogram.utils.chat_action import ChatActionMiddleware, ChatActionSender
 from aiogram.utils.i18n import gettext as _
 from g4f import ChatCompletion, Provider
-from openai import AsyncOpenAI
+
 
 from bot.middlewares import DatabaseMiddleware, ObservedFieldRestrictionMiddleware
 from bot_instance import bot
@@ -32,8 +32,7 @@ class ChatGPT:
         self.initial_settings = {"role": "system",
                                  "content": "You are a kind and sensible assistant. "
                                             "You must answer the questions with the language which user speaks."}
-        # Initialize AsyncOpenAI instance
-        self.openai = AsyncOpenAI(api_key=OPEN_AI)
+    
 
         self.providers = {}
         self.provider_list = []
