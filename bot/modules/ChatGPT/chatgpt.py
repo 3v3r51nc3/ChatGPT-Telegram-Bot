@@ -14,7 +14,6 @@ from g4f import ChatCompletion, Provider
 
 from bot.middlewares import DatabaseMiddleware, ObservedFieldRestrictionMiddleware
 from bot_instance import bot
-from config import OPEN_AI
 from database.database import db
 
 """logging.basicConfig(
