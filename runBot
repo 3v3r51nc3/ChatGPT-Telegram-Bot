@@ -1,0 +1,26 @@
+#/usr/bin/env bash
+
+echo "Current time $(date)"
+echo "Entering virtual environment"
+source venv/bin/activate
+
+while true;
+do
+
+echo "Starting the Bot"
+
+python3 main.py &
+echo "Current PID: $!"
+trap "echo Terminating the script; kill -9 $!; exit;" SIGINT
+
+sleep 86400
+echo "Killing process with PID: $!"
+kill -9 $!
+
+done;
+
+
+
+
+
+
