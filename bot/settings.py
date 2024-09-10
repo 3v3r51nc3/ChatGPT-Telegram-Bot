@@ -27,26 +27,6 @@ async def send_back_settings(cq: CallbackQuery):
                                 reply_markup=await kb.settings_keyboard(cq.from_user.id))
 
 
-@settings.callback_query(CallBackSettingsData.filter(F.button == "provider"))
-async def send_provider(cq: CallbackQuery, provider: str):
-    await bot.edit_message_text(
-        message_id=cq.message.message_id,
-        chat_id=cq.message.chat.id,
-        text=_("Choose your GPT provider. By default AiChatOnline is enabled."),
-        reply_markup=await kb.settings_provider_keyboard(cq.from_user.id, chatgpt.providers, current=provider)
-    )
-
-
-@settings.callback_query(CallBackSettingsData.filter(F.button.in_(chatgpt.providers)))
-async def change_provider(cq: CallbackQuery, state: FSMContext, callback_data: CallBackSettingsData, provider: str):
-    if provider == callback_data.button:
-        await cq.answer(_("You chose the same provider."))
-        return
-    await state.update_data(provider=callback_data.button)
-    await cq.answer(_("Provider was changed"))
-    await send_provider(cq, callback_data.button)
-
-
 @settings.callback_query(CallBackSettingsData.filter(F.button == "lan"))
 async def send_language(cq: CallbackQuery, state: FSMContext):
     await state.update_data(first="lan")

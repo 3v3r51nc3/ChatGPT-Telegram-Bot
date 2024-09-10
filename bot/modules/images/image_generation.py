@@ -7,10 +7,10 @@ from bot.middlewares import DatabaseMiddleware
 from aiogram.utils.chat_action import ChatActionMiddleware
 from bot_instance import bot
 import aiohttp
-from config import EDEN_AI
 from aiogram.utils.i18n import gettext as _
 from bot.commands import CommandArgs
 from aiogram.filters import Command
+from config import EDEN_AI, admin_ids
 
 
 # Define a function to generate an image using the specified prompt
@@ -20,7 +20,7 @@ async def generate_image(prompt):
     payload = {
         "providers": "replicate",
         "text": prompt,
-        "resolution": "1024x1024"
+        "resolution": "256x256"
     }
 
     async with aiohttp.ClientSession() as session:
@@ -46,7 +46,9 @@ async def cmd_generate(msg: Message):
         # Generate an image using the specified prompt and send it as a photo
         url = await generate_image(await CommandArgs.remove_first_word(msg.text))
         await bot.send_photo(chat_id=msg.chat.id, photo=url, reply_to_message_id=msg.message_id)
-    except Exception:
+    except Exception as e:
+        for user_id in admin_ids:
+                await bot.send_message(user_id, str(e))
         # Handle errors and inform the user
         await msg.answer(_("Sorry, some problem occurred"))
 
@@ -60,7 +62,9 @@ async def cmd_reply_generate(msg: Message):
             # Generate an image using the reply prompt and send it as a photo
             url = await generate_image(msg.reply_to_message.text)
             await bot.send_photo(chat_id=msg.chat.id, photo=url, reply_to_message_id=msg.message_id)
-        except Exception:
+        except Exception as e:
+            for user_id in admin_ids:
+                await bot.send_message(user_id, str(e))
             # Handle errors and inform the user
             await msg.answer(_("Sorry, some problem occurred"))
     else:

@@ -12,8 +12,6 @@ langs = {'en': 'Eng',
 async def settings_keyboard(user_id: int):
     builder = InlineKeyboardBuilder()
 
-    builder.button(text=_("GPT Provider"),
-                   callback_data=CallBackSettingsData(user_id=user_id, button="provider").pack())
     builder.button(text=_("Language"), callback_data=CallBackSettingsData(user_id=user_id, button="lan").pack())
     builder.row(
         InlineKeyboardButton(text=_("❌Delete"),
@@ -32,21 +30,6 @@ async def settings_lang_keyboard(user_id: int, current: str):
 
     builder.adjust(3)
 
-    builder.row(
-        InlineKeyboardButton(text=_("↩️Back"),
-                             callback_data=CallBackSettingsData(user_id=user_id, button="set").pack()))
-
-    return builder.as_markup()
-
-
-async def settings_provider_keyboard(user_id: int, providers: dict, current: str):
-    builder = InlineKeyboardBuilder()
-
-    for provider in providers.keys():
-        builder.button(text=provider if provider != current else f"●{provider}●",
-                       callback_data=CallBackSettingsData(user_id=user_id, button=provider))
-
-    builder.adjust(3)
     builder.row(
         InlineKeyboardButton(text=_("↩️Back"),
                              callback_data=CallBackSettingsData(user_id=user_id, button="set").pack()))

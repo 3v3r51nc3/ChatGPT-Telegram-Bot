@@ -13,30 +13,6 @@ from bot_instance import get_bot_id
 from database.database import db
 
 
-class ChatGPTProvider(BaseMiddleware):
-    def __init__(self, providers: dict):
-        self.providers = providers
-        self.key = 'provider'
-
-    async def __call__(
-            self,
-            handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-            event: Message,
-            data: Dict[str, Any]
-    ) -> Any:
-        fsm_context: Optional[FSMContext] = data.get("state")
-        provider = None
-        if fsm_context:
-            fsm_data = await fsm_context.get_data()
-            provider = fsm_data.get(self.key, None)
-        if not provider:
-            provider = next(iter(self.providers.keys()))
-            if fsm_context:
-                await fsm_context.update_data(data={self.key: provider})
-        data.update(provider=provider)
-        return await handler(event, data)
-
-
 class ObservedFieldRestrictionMiddleware(BaseMiddleware):
     # Middleware for handling events in groups
     # It checks conditions for routers to handle the event
