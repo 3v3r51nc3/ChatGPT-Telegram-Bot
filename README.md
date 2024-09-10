@@ -41,8 +41,3 @@ Follow these steps to set up and run the **ChatGPT-Telegram-Bot**:
                 """Initialize an InnerTube object.
 
      ```
-
-
-Now, your **ChatGPT-Telegram-Bot** is ready to use. Just run main.py file in console. 
-
-You can use ngrok for establishing webhook. 
